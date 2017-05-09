@@ -1,0 +1,104 @@
+<html>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box;}
+#carousel {
+  width: 500px;
+}
+body{ font-family: Georgia, serif;}
+
+textarea { 
+  font-family: monospace;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+#editor, #field {
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+
+#editor {
+  border-right: 1px solid black;
+}
+
+#field {
+  padding: 10px;
+}
+
+</style>
+
+  <div id="editor">
+    <textarea>
+die bg
+/imgs/tumblr_oaeftcUqYh1v53huuo3_540.jpg
+/imgs/tumblr_oaeftcUqYh1v53huuo5_540.jpg
+/imgs/tumblr_oaeftcUqYh1v53huuo10_540.jpg
+/imgs/tumblr_oaeftcUqYh1v53huuo4_400.jpg
+/imgs/tumblr_oaeftcUqYh1v53huuo6_400.jpg
+/imgs/tumblr_oaeftcUqYh1v53huuo1_540.jpg
+/imgs/tumblr_oaeftcUqYh1v53huuo9_540.jpg
+/imgs/tumblr_oaeftcUqYh1v53huuo8_400.jpg
+/imgs/tumblr_oaeftcUqYh1v53huuo7_400.jpg
+/imgs/tumblr_oaeftcUqYh1v53huuo2_540.jpg
+
+die location
+Tomb
+Maze
+Mausoleum
+Fortress
+Forest
+
+deck adj
+Spooky
+Ancient
+Cursed
+Fearsome
+Weird
+Dark
+Demon
+Dusty
+
+die person
+Vizier
+Wizard
+Mage
+Scholar
+King
+Duke
+Baroness
+Lady
+Witch
+Snorf
+
+generator
+new-row
+image [bg]
+style height 300px
+start-column
+print STR
+print DEX
+print WIS
+print HP
+end-column
+start-column
+roll 3
+roll 3
+roll 3
+roll 1
+end-column
+col-widths 70 15
+new-row
+print The [adj] [location] of the [adj] [person]
+
+
+    </textarea>
+  </div>
+  <div id="field">
+    <div id="carousel"></div>
+  </div>
+
+  <script src="./index.js"></script>
+</html>
