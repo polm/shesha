@@ -56,11 +56,6 @@ class Generator
     if funcname == \print then words = [words.join ' ']
     if funcname == \roll then words = words.map -> +it
 
-    console.log \-----
-    console.log funcname
-    console.log this[funcname]
-    console.log words
-    console.log this
     this[funcname].apply this, words
 
 
@@ -98,6 +93,10 @@ class Generator
     while li < lines.length
       line = lines[li].trim!
 
+      if line.0 == \#
+        li++
+        continue
+
       words = line.split ' '
       command = words.shift!
 
@@ -111,7 +110,7 @@ class Generator
       if command == \deck
         name = words.join ' '
         terms = @read-terms(lines, li)
-        @add-die name, terms
+        @add-deck name, terms
         li += 1 + terms.length
         continue
 
@@ -225,9 +224,6 @@ class WidgetRenderer
   set-generator: ~> @genfunc = it
 
   roll: ~>
-    console.log \*****
-    console.log arguments
-    console.log roll.apply this, arguments
     @print (roll.apply this, arguments).to-string!
 
   generate: ~>
@@ -237,139 +233,6 @@ class WidgetRenderer
     @el.innerHTML = '' # reset insides
     @new-row!
     @genfunc! # actually fill stuff
-
-blarg = new Generator!
-
-bgs = """
-/imgs/tumblr_oaeftcUqYh1v53huuo3_540.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo5_540.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo10_540.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo4_400.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo6_400.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo1_540.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo9_540.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo8_400.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo7_400.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo2_540.jpg
-""".trim!.split ("\n")
-
-blarg.add-die \genders, [\male \female \other]
-blarg.add-die \male-names, [\bob \charlie]
-blarg.add-die \female-names, [\sally \susan]
-blarg.add-die \other-names, [\fizzbit \filx]
-blarg.add-deck \bg, bgs
-blarg.add-die \location, [\Tomb \Maze \Mausoleum \Fortress \Forest]
-blarg.add-deck \adj, <[ Spooky Ancient Cursed Fearsome Weird Dark Demon Dusty ]>
-blarg.add-die \person, <[ Vizier Wizard Mage Scholar King Duke Baroness Lady Witch Snorf ]>
-
-blarg.set-generator ->
-  @new-row!
-  @image "[bg]"
-  @style \height \300px
-
-  @start-column!
-  @print \STR
-  @print \DEX
-  @print \WIS
-  @print \HP
-  @end-column!
-
-  @start-column!
-  @roll 3
-  @roll 3
-  @roll 3
-  @roll 1
-  @end-column!
-
-  @col-widths 70, 15
-  @new-row!
-  @print "The [adj] [location] of the [adj] [person]"
-  @new-row!
-  @print "It belongs to [[genders]-names]!"
-demo = """
-die bg
-/imgs/tumblr_oaeftcUqYh1v53huuo3_540.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo5_540.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo10_540.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo4_400.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo6_400.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo1_540.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo9_540.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo8_400.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo7_400.jpg
-/imgs/tumblr_oaeftcUqYh1v53huuo2_540.jpg
-
-die location
-Tomb
-Maze
-Mausoleum
-Fortress
-Forest
-
-deck adj
-Spooky
-Ancient
-Cursed
-Fearsome
-Weird
-Dark
-Demon
-Dusty
-
-die person
-Vizier
-Wizard
-Mage
-Scholar
-King
-Duke
-Baroness
-Lady
-Witch
-Snorf
-
-generator
-new-row
-image [bg]
-style height 300px
-start-column
-print STR
-print DEX
-print WIS
-print HP
-end-column
-start-column
-roll 3
-roll 3
-roll 3
-roll 1
-end-column
-col-widths 70 15
-new-row
-print The [adj] [location] of the [adj] [person]
-
-"""
-
-blarg.read-generator demo
-
-test = "[fish[pie]fish]"
-
-rec-parse-inner = (str) ->
-  ci = 0
-  out = ''
-  while ci < str.length and str[ci] != \]
-    if str[ci] == \[
-      inside = rec-parse-inner str.substr(ci+1), \]
-      ci += inside.length + 2
-      out += "(#inside)"
-      continue
-    out += str[ci]
-    ci++
-  return out
-
-console.log \=============
-console.log rec-parse-inner test
-#blarg.make-widget \#carousel
 
 textarea = document.query-selector 'textarea'
 
@@ -382,3 +245,10 @@ textarea.onkeyup = ->
     \ok
 
 textarea.onkeyup!
+
+a = deck [1 2 3]
+
+console.log a!
+console.log a!
+console.log a!
+console.log a!
