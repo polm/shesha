@@ -32,6 +32,12 @@ textarea {
 
   <div id="editor">
     <textarea>
+# Welcome to the Shesha Generator demo! 
+# This part of the page is the code for the right side
+# Whenever you push a key, the right side will update
+# this side is made up of blocks, separated by blank lines
+# Scroll down to "die location"...
+
 die bg
 imgs/tumblr_oaeftcUqYh1v53huuo3_540.jpg
 imgs/tumblr_oaeftcUqYh1v53huuo5_540.jpg
@@ -44,6 +50,9 @@ imgs/tumblr_oaeftcUqYh1v53huuo8_400.jpg
 imgs/tumblr_oaeftcUqYh1v53huuo7_400.jpg
 imgs/tumblr_oaeftcUqYh1v53huuo2_540.jpg
 
+# Try removing or changing some of these entries
+# you can click on the right side to re-roll
+# when you're done, look at the next block
 die location
 Tomb
 Maze
@@ -51,6 +60,9 @@ Mausoleum
 Fortress
 Forest
 
+# This is a "deck" instead of a die
+# what happens if you reduce it to just two entries?
+# scroll all the way down...
 deck adj
 Spooky
 Ancient
@@ -73,6 +85,14 @@ Lady
 Witch
 Snorf
 
+# this block defines how to build the generator
+# try fiddling with the "print" line
+# try adding another "print" line at the top
+# try putting "new-row" in
+
+# go here to see more instructions:
+# http://github.com/polm/shesha
+# (still a mess though)
 generator
 new-row
 image [bg]
@@ -92,8 +112,6 @@ end-column
 col-widths 70 15
 new-row
 print The [adj] [location] of the [adj] [person]
-
-
     </textarea>
   </div>
   <div id="field">
