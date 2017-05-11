@@ -8,6 +8,15 @@ roll = (num=1, sides=6, bonus=0) ->
       res += 1 + R sides
     return res
 
+choose = ->
+  template = Array.prototype.join.call arguments, ' '
+  # this is short anonymous tables inside templates
+  # ex:
+  # print You see a [!c /fighter/wizard/rogue/]
+  delim = template[0]
+  choices = template.split(delim).filter -> it
+  return pick choices
+
 deck = (items) ->
   items = items.slice 0 # don't modify the argument
   orig = items.slice 0 # save a copy
@@ -41,6 +50,9 @@ class Generator
 
   ~>
     @sources = {}
+    @special =
+      r: roll
+      c: choose
 
   add-deck: (name, items) ~>
     @sources[name] = deck items
@@ -67,7 +79,13 @@ class Generator
         [step, key] = @render template.substr(ci + 1), true
         ci += 2 + step
         #TODO syntax for rolling etc.
-        out += @render @sources[key]!
+        if key[0] == \!
+          key = key.substr 1
+          words = key.split ' '
+          cmd = words.shift!
+          out += @special[cmd].apply this, words
+        else
+          out += @render @sources[key]!
         continue
 
       out += template[ci]
