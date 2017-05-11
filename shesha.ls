@@ -161,6 +161,12 @@ class WidgetRenderer
     @sources = @gen.sources
     @vert = false
 
+  save: (key, ...words) ~>
+    # this is used to save values during a run
+    # it's faked using a die with one side
+    template = words.join ' '
+    @gen.add-die key, [@gen.render template]
+
   make-div: ~>
     div = document.create-element \div
     div.style.height = \100%

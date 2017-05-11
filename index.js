@@ -117,12 +117,9 @@
           ref$ = this.render(template.substr(ci + 1), true), step = ref$[0], key = ref$[1];
           ci += 2 + step;
           if (key[0] === '!') {
-            console.log(key);
             key = key.substr(1);
             words = key.split(' ');
             cmd = words.shift();
-            console.log(this.special[cmd].apply(this, words));
-            console.log(words);
             out += this.special[cmd].apply(this, words);
           } else {
             out += this.render(this.sources[key]());
@@ -229,10 +226,21 @@
       this$.newRow = bind$(this$, 'newRow', prototype);
       this$.makeVertDiv = bind$(this$, 'makeVertDiv', prototype);
       this$.makeDiv = bind$(this$, 'makeDiv', prototype);
+      this$.save = bind$(this$, 'save', prototype);
       this$.sources = this$.gen.sources;
       this$.vert = false;
       return this$;
     } function ctor$(){} ctor$.prototype = prototype;
+    WidgetRenderer.prototype.save = function(key){
+      var words, res$, i$, to$, template;
+      res$ = [];
+      for (i$ = 1, to$ = arguments.length; i$ < to$; ++i$) {
+        res$.push(arguments[i$]);
+      }
+      words = res$;
+      template = words.join(' ');
+      return this.gen.addDie(key, [this.gen.render(template)]);
+    };
     WidgetRenderer.prototype.makeDiv = function(){
       var div;
       div = document.createElement('div');
