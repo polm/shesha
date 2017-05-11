@@ -163,14 +163,10 @@ class WidgetRenderer
 
   make-div: ~>
     div = document.create-element \div
-    div.style.width = \100%
-    div.style.float = \left
+    div.style.height = \100%
+    div.style.flex = 1
     div.style.border = "1px solid black"
-    @row.push div
     @row-el.append-child div
-    percent = (100 / @row.length) + \%
-    for cell in @row
-      cell.style.width = percent
     return div
 
   make-vert-div: ~>
@@ -186,36 +182,62 @@ class WidgetRenderer
     return div
 
   new-row: ~>
-    @row = []
     @row-el = document.create-element \div
+    @row-el.class-list.add \row
     @row-el.style.width = \100%
+    @row-el.style.height = \50px
+    @row-el.style.display = \flex
+    @row-el.style.flex = 1
     @el.append-child @row-el
 
-  print: (template) ~>
+  print: (template, vert=false) ~>
     out = @gen.render template
-    divmaker = (@vert and @make-vert-div) or @make-div
+    divmaker = ((@vert or vert) and @make-vert-div) or @make-div
     div = divmaker!
     div.style.text-align = \center
     div.style.padding = \10px
     div.innerHTML = out
     div.style.fontSize = \20px
-    if not @vert then div.style.height = \50px
     div.style.display = \flex
     div.style.align-items = \center
     div.style.justify-content = \center
 
   image: (template) ~>
-    src = @gen.render template
+    rendered = @gen.render template
+    words = rendered.split ' '
+    src = words.shift!
+    caption = words.join ' '
     div = @make-div!
+    div.style.display = \flex
+    div.style.flex-direction = \column
+    @row-el.style.height = \300px
+    div.style.height = \100%
     img = new Image!
-    div.style.height = \300px
-    div.style.backgroundSize = \cover
-    div.style.backgroundPosition = "center center"
+    img-holder = @make-vert-div!
+    if caption
+      @print caption, true
+    img-holder.style.flex-grow = 1
+    img-holder.style.backgroundSize = \cover
+    img-holder.style.backgroundPosition = "center center"
+
     img.onload = ->
-      div.style.opacity = 0
-      div.style.backgroundImage = "url(#src)"
-      fade-in div
+      img-holder.style.backgroundImage = "url(#src)"
     img.src = src
+
+  nest: ~>
+    @parents = @parents or []
+    @parents.push @el
+    @row-els = @row-els or []
+    @row-els.push @row-el
+    new-parent = @make-div!
+    new-parent.style.flex-direction = \column
+    new-parent.style.display = \flex
+    @el = new-parent
+    @new-row!
+
+  end-nest: ~>
+    @el = @parents.pop!
+    @row-el = @row-els.pop!
 
   start-column: ~>
     @oldvert = @vert
@@ -233,11 +255,11 @@ class WidgetRenderer
   col-widths: (...widths) ~>
     cols = @row-el.children
     for ci from 0 til cols.length
-      percent = widths[*-1]
+      share = widths[*-1]
       if ci < widths.length
-        percent = widths[ci]
+        share = widths[ci]
 
-      cols[ci].style.width = percent + \%
+      cols[ci].style.flex = share
 
   set-generator: ~> @genfunc = it
 
@@ -249,8 +271,10 @@ class WidgetRenderer
       @sources[source].reset?! # reset decks as needed
 
     @el.innerHTML = '' # reset insides
+    @el.style.opacity = 0
     @new-row!
     @genfunc! # actually fill stuff
+    fade-in @el
 
 textarea = document.query-selector 'textarea'
 
@@ -259,7 +283,7 @@ textarea.onkeyup = ->
   try
     gen.read-generator textarea.value
     gen.make-widget \#carousel
-  catch
-    \ok
+  catch e
+    console.log e
 
 textarea.onkeyup!
