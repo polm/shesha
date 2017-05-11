@@ -85,6 +85,31 @@ Lady
 Witch
 Snorf
 
+deck tarot
+tarot/RWS_Tarot_00_Fool.jpg
+tarot/RWS_Tarot_01_Magician.jpg
+tarot/RWS_Tarot_02_High_Priestess.jpg
+tarot/RWS_Tarot_03_Empress.jpg
+tarot/RWS_Tarot_04_Emperor.jpg
+tarot/RWS_Tarot_05_Hierophant.jpg
+tarot/RWS_Tarot_06_Lovers.jpg
+tarot/RWS_Tarot_07_Chariot.jpg
+tarot/RWS_Tarot_08_Strength.jpg
+tarot/RWS_Tarot_09_Hermit.jpg
+tarot/RWS_Tarot_10_Wheel_of_Fortune.jpg
+tarot/RWS_Tarot_11_Justice.jpg
+tarot/RWS_Tarot_12_Hanged_Man.jpg
+tarot/RWS_Tarot_13_Death.jpg
+tarot/RWS_Tarot_14_Temperance.jpg
+tarot/RWS_Tarot_15_Devil.jpg
+tarot/RWS_Tarot_16_Tower.jpg
+tarot/RWS_Tarot_17_Star.jpg
+tarot/RWS_Tarot_18_Moon.jpg
+tarot/RWS_Tarot_19_Sun.jpg
+tarot/RWS_Tarot_20_Judgement.jpg
+tarot/RWS_Tarot_21_World.jpg
+
+
 # this block defines how to build the generator
 # try fiddling with the "print" line
 # try adding another "print" line at the top
@@ -94,22 +119,26 @@ Snorf
 # http://github.com/polm/shesha
 # (still a mess though)
 generator
+image [tarot]
+image [tarot]
+image [tarot]
 new-row
-image [bg]
 style height 300px
-start-column
-print STR
-print DEX
-print WIS
-print HP
-end-column
-start-column
-roll 3
-roll 3
-roll 3
-roll 1
-end-column
-col-widths 70 15
+image [bg]
+nest
+  print STR
+  roll 3
+  new-row
+  print DEX
+  roll 3
+  new-row
+  print WIS
+  roll 3
+  new-row
+  print HP
+  roll 1
+end-nest
+col-widths 70 30
 new-row
 print The [adj] [location] of the [adj] [person]
     </textarea>
