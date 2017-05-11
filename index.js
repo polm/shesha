@@ -100,6 +100,9 @@
       if (funcname === 'print') {
         words = [words.join(' ')];
       }
+      if (funcname === 'image') {
+        words = [words.join(' ')];
+      }
       if (funcname === 'roll') {
         words = words.map(function(it){
           return +it;
@@ -217,18 +220,16 @@
       this$.setGenerator = bind$(this$, 'setGenerator', prototype);
       this$.colWidths = bind$(this$, 'colWidths', prototype);
       this$.style = bind$(this$, 'style', prototype);
-      this$.endColumn = bind$(this$, 'endColumn', prototype);
-      this$.startColumn = bind$(this$, 'startColumn', prototype);
       this$.endNest = bind$(this$, 'endNest', prototype);
       this$.nest = bind$(this$, 'nest', prototype);
       this$.image = bind$(this$, 'image', prototype);
       this$.print = bind$(this$, 'print', prototype);
       this$.newRow = bind$(this$, 'newRow', prototype);
-      this$.makeVertDiv = bind$(this$, 'makeVertDiv', prototype);
       this$.makeDiv = bind$(this$, 'makeDiv', prototype);
       this$.save = bind$(this$, 'save', prototype);
+      this$.loadCount = 0;
+      this$.root = this$.el;
       this$.sources = this$.gen.sources;
-      this$.vert = false;
       return this$;
     } function ctor$(){} ctor$.prototype = prototype;
     WidgetRenderer.prototype.save = function(key){
@@ -241,28 +242,20 @@
       template = words.join(' ');
       return this.gen.addDie(key, [this.gen.render(template)]);
     };
-    WidgetRenderer.prototype.makeDiv = function(){
+    WidgetRenderer.prototype.makeDiv = function(parent){
       var div;
+      parent == null && (parent = this.rowEl);
       div = document.createElement('div');
       div.style.height = '100%';
       div.style.flex = 1;
       div.style.border = "1px solid black";
-      this.rowEl.appendChild(div);
-      return div;
-    };
-    WidgetRenderer.prototype.makeVertDiv = function(){
-      var div, parent, ref$, percent, i$, len$, cell;
-      div = document.createElement('div');
-      div.style.width = '100%';
-      div.style.float = 'left';
-      div.style.border = "1px solid black";
-      parent = (ref$ = this.rowEl.children)[ref$.length - 1];
+      div.style.textAlign = 'center';
+      div.style.padding = '10px';
+      div.style.fontSize = '20px';
+      div.style.display = 'flex';
+      div.style.alignItems = 'center';
+      div.style.justifyContent = 'center';
       parent.appendChild(div);
-      percent = 100 / parent.children.length + '%';
-      for (i$ = 0, len$ = (ref$ = parent.children).length; i$ < len$; ++i$) {
-        cell = ref$[i$];
-        cell.style.height = percent;
-      }
       return div;
     };
     WidgetRenderer.prototype.newRow = function(){
@@ -274,22 +267,14 @@
       this.rowEl.style.flex = 1;
       return this.el.appendChild(this.rowEl);
     };
-    WidgetRenderer.prototype.print = function(template, vert){
-      var out, divmaker, div;
-      vert == null && (vert = false);
+    WidgetRenderer.prototype.print = function(template){
+      var out, div;
       out = this.gen.render(template);
-      divmaker = ((this.vert || vert) && this.makeVertDiv) || this.makeDiv;
-      div = divmaker();
-      div.style.textAlign = 'center';
-      div.style.padding = '10px';
-      div.innerHTML = out;
-      div.style.fontSize = '20px';
-      div.style.display = 'flex';
-      div.style.alignItems = 'center';
-      return div.style.justifyContent = 'center';
+      div = this.makeDiv();
+      return div.innerHTML = out;
     };
     WidgetRenderer.prototype.image = function(template){
-      var rendered, words, src, caption, div, img, imgHolder;
+      var rendered, words, src, caption, div, img, imgHolder, cdiv, this$ = this;
       rendered = this.gen.render(template);
       words = rendered.split(' ');
       src = words.shift();
@@ -297,18 +282,33 @@
       div = this.makeDiv();
       div.style.display = 'flex';
       div.style.flexDirection = 'column';
+      div.style.padding = 0;
       this.rowEl.style.height = '300px';
       div.style.height = '100%';
       img = new Image();
-      imgHolder = this.makeVertDiv();
-      if (caption) {
-        this.print(caption, true);
-      }
+      imgHolder = document.createElement('div');
       imgHolder.style.flexGrow = 1;
+      imgHolder.style.flex = 6;
       imgHolder.style.backgroundSize = 'cover';
       imgHolder.style.backgroundPosition = "center center";
+      imgHolder.style.width = '100%';
+      if (caption) {
+        this.rowEl.style.height = '350px';
+        cdiv = this.makeDiv(div);
+        cdiv.style.width = '100%';
+        cdiv.innerHTML = caption;
+      }
+      this.loadCount += 1;
       img.onload = function(){
-        return imgHolder.style.backgroundImage = "url(" + src + ")";
+        this$.loadCount -= 1;
+        imgHolder.style.backgroundImage = "url(" + src + ")";
+        div.appendChild(imgHolder);
+        if (cdiv) {
+          div.appendChild(cdiv);
+        }
+        if (this$.loadCount === 0) {
+          return fadeIn(this$.root);
+        }
       };
       return img.src = src;
     };
@@ -321,22 +321,13 @@
       newParent = this.makeDiv();
       newParent.style.flexDirection = 'column';
       newParent.style.display = 'flex';
+      newParent.style.padding = 0;
       this.el = newParent;
       return this.newRow();
     };
     WidgetRenderer.prototype.endNest = function(){
       this.el = this.parents.pop();
       return this.rowEl = this.rowEls.pop();
-    };
-    WidgetRenderer.prototype.startColumn = function(){
-      var col;
-      this.oldvert = this.vert;
-      col = this.makeDiv();
-      col.style.height = '100%';
-      return this.vert = true;
-    };
-    WidgetRenderer.prototype.endColumn = function(){
-      return this.vert = this.oldvert;
     };
     WidgetRenderer.prototype.style = function(key, val){
       return this.rowEl.style[key] = val;
@@ -375,8 +366,7 @@
       this.el.innerHTML = '';
       this.el.style.opacity = 0;
       this.newRow();
-      this.genfunc();
-      return fadeIn(this.el);
+      return this.genfunc();
     };
     return WidgetRenderer;
   }());

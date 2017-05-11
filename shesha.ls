@@ -66,10 +66,10 @@ class Generator
 
     # per-function cleanup
     if funcname == \print then words = [words.join ' ']
+    if funcname == \image then words = [words.join ' ']
     if funcname == \roll then words = words.map -> +it
 
     this[funcname].apply this, words
-
 
   render: (template, inner=false) ~>
     out = ''
@@ -158,8 +158,9 @@ class Generator
 
 class WidgetRenderer
   (@gen, @el) ~>
+    @load-count = 0
+    @root = @el
     @sources = @gen.sources
-    @vert = false
 
   save: (key, ...words) ~>
     # this is used to save values during a run
@@ -167,24 +168,20 @@ class WidgetRenderer
     template = words.join ' '
     @gen.add-die key, [@gen.render template]
 
-  make-div: ~>
+  make-div: (parent=@row-el) ~>
     div = document.create-element \div
     div.style.height = \100%
     div.style.flex = 1
     div.style.border = "1px solid black"
-    @row-el.append-child div
-    return div
 
-  make-vert-div: ~>
-    div = document.create-element \div
-    div.style.width = \100%
-    div.style.float = \left
-    div.style.border = "1px solid black"
-    parent = @row-el.children[*-1]
+    div.style.text-align = \center
+    div.style.padding = \10px
+    div.style.fontSize = \20px
+    div.style.display = \flex
+    div.style.align-items = \center
+    div.style.justify-content = \center
+
     parent.append-child div
-    percent = (100 / parent.children.length) + \%
-    for cell in parent.children
-      cell.style.height = percent
     return div
 
   new-row: ~>
@@ -196,38 +193,46 @@ class WidgetRenderer
     @row-el.style.flex = 1
     @el.append-child @row-el
 
-  print: (template, vert=false) ~>
+  print: (template) ~>
     out = @gen.render template
-    divmaker = ((@vert or vert) and @make-vert-div) or @make-div
-    div = divmaker!
-    div.style.text-align = \center
-    div.style.padding = \10px
+    div = @make-div!
     div.innerHTML = out
-    div.style.fontSize = \20px
-    div.style.display = \flex
-    div.style.align-items = \center
-    div.style.justify-content = \center
-
+    
   image: (template) ~>
     rendered = @gen.render template
     words = rendered.split ' '
     src = words.shift!
     caption = words.join ' '
+
     div = @make-div!
     div.style.display = \flex
     div.style.flex-direction = \column
+    div.style.padding = 0
     @row-el.style.height = \300px
     div.style.height = \100%
     img = new Image!
-    img-holder = @make-vert-div!
-    if caption
-      @print caption, true
+    img-holder = document.create-element \div
     img-holder.style.flex-grow = 1
+    img-holder.style.flex = 6
     img-holder.style.backgroundSize = \cover
     img-holder.style.backgroundPosition = "center center"
+    img-holder.style.width = \100%
 
-    img.onload = ->
+    if caption
+      @row-el.style.height = \350px
+      cdiv = @make-div div
+      cdiv.style.width = \100%
+      cdiv.innerHTML = caption
+
+    @load-count += 1
+    img.onload = ~>
+      @load-count -= 1
       img-holder.style.backgroundImage = "url(#src)"
+      div.append-child img-holder
+      if cdiv
+        div.append-child cdiv
+      if @load-count == 0
+        fade-in @root
     img.src = src
 
   nest: ~>
@@ -238,22 +243,13 @@ class WidgetRenderer
     new-parent = @make-div!
     new-parent.style.flex-direction = \column
     new-parent.style.display = \flex
+    new-parent.style.padding = 0
     @el = new-parent
     @new-row!
 
   end-nest: ~>
     @el = @parents.pop!
     @row-el = @row-els.pop!
-
-  start-column: ~>
-    @oldvert = @vert
-    col = @make-div!
-    col.style.height = \100%
-    @vert = true
-
-  end-column: ~>
-    @vert = @oldvert
-
 
   style: (key, val) ~>
     @row-el.style[key] = val
@@ -280,7 +276,6 @@ class WidgetRenderer
     @el.style.opacity = 0
     @new-row!
     @genfunc! # actually fill stuff
-    fade-in @el
 
 textarea = document.query-selector 'textarea'
 
