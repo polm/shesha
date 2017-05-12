@@ -5,7 +5,14 @@
 .shesha-widget {
   width: 500px;
 }
-body{ font-family: Georgia, serif;}
+body{ font-family: Georgia, serif; display: flex;}
+
+button {
+  display: block;
+  padding: 10px;
+  width: 500px;
+  font-size: 16px;
+}
 
 textarea { 
   font-family: monospace;
@@ -15,9 +22,9 @@ textarea {
 }
 
 #editor, #field {
-  width: 50%;
-  height: 100%;
-  float: left;
+  flex: 1;
+  flex-grow: 1;
+  max-height: 100%;
 }
 
 #editor {
@@ -26,6 +33,11 @@ textarea {
 
 #field {
   padding: 10px;
+  overflow-y: scroll;
+}
+
+.shesha-widget, button {
+  margin: 10px auto;
 }
 
 </style>
@@ -65,7 +77,6 @@ Forest
 # scroll all the way down...
 deck adj
 Spooky
-Ancient
 Cursed
 Fearsome
 Weird
@@ -108,12 +119,6 @@ tarot/RWS_Tarot_18_Moon.jpg
 tarot/RWS_Tarot_19_Sun.jpg
 tarot/RWS_Tarot_20_Judgement.jpg
 tarot/RWS_Tarot_21_World.jpg
-
-
-# this block defines how to build the generator
-# try fiddling with the "print" line
-# try adding another "print" line at the top
-# try putting "new-row" in
 
 deck target-adj
 Silver
@@ -169,6 +174,11 @@ Dungeon
 Spider
 Knight
 
+# this block defines how to build the generator
+# try fiddling with the "print" line
+# try adding another "print" line at the top
+# try putting "new-row" in
+
 # go here to see more instructions:
 # http://github.com/polm/shesha
 # (still a mess though)
@@ -179,12 +189,18 @@ new-row
 image [bg]
 new-row
 print You have been hired by a local [patron] to find the [macguffin]. [!c /Legends/Stories/Tales/Ancient records] say to look in the [adj] [location], though you will have to [!c /contend with/get past/defeat/overcome/] the [adj] [problem].
+new-row
+print Here is your fortune...
+new-row
+image [tarot] Past
+image [tarot] Present
+image [tarot] Future
     </textarea>
   </div>
   <div id="field">
     <button id="copy">Copy Widget Code</button>
     <div class="shesha-widget"></div>
-    <textarea id="dummy" style="height:1;opacity:0"></textarea>
+    <textarea id="dummy" style="display:none"></textarea>
   </div>
 
   <script src="./editor.js"></script>

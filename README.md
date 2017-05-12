@@ -27,12 +27,25 @@ The difference between a `die` and a `deck` is that a `die` **can** repeat value
 
 - **new-row**: make a new row in the generator.
 - **print**: make a new cell in the row, and put text inside it. Terms inside `[brackets]` are taken to be the names of sources (dice or decks set before). Brackets can be nested.
-- **img**: like `print`, but it expects to get an image url
-- **start-column**: changes print to stack boxes vertically
-- **end-column**: changes print back to working horizontally
+- **image**: like `print`, but it expects to get an image url. Any text after the url becomes a caption.
 - **style**: set the CSS attribute of the current row
 - **roll**: roll dice. Takes three values: number of dice to roll, sides per die, and bonus to apply.
-- **col-widths**: set widths of elements in the current row by percent.
+- **col-widths**: set widths of elements in the current row by ratio (uses flexbox).
+- **save**: saves the result of a template to a source with the given name. This is a bit complicated, so here's an example:
+
+    deck people
+    Alice
+    Bob
+
+    generator
+    save first [people]
+    save second [people]
+    print [first] said to [second] "Hello [second]"
+
+There are also embedded commands that can go in text passed to `print` and the like. 
+
+- **roll**: Roll dice in-line. Ex: `print HP: [!r 1]` (rolls 1d6)
+- **choose**: Choose from an in-line list. The first non-whitespace character is used as the delimiter. Ex: `print You see a [!c /wizard/fighter/thief/]`
 
 ## License
 
