@@ -1,4 +1,4 @@
-all: index.js
+all: embed.js editor.js random.js
 
 random.js: random.ls
 	lsc -c -o . random.ls
@@ -6,5 +6,12 @@ random.js: random.ls
 shesha.js: shesha.ls
 	lsc -c -o . shesha.ls
 
-index.js: shesha.js
-	browserify shesha.js > index.js
+embed.js: embed.ls shesha.js
+	lsc -c -o . embed.ls 
+	browserify embed.js > embed.browser.js
+	mv embed.browser.js embed.js
+
+editor.js: editor.ls shesha.js
+	lsc -c -o . editor.ls 
+	browserify editor.js > editor.browser.js
+	mv editor.browser.js editor.js

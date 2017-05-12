@@ -2,7 +2,7 @@
 
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box;}
-#carousel {
+.shesha-widget {
   width: 500px;
 }
 body{ font-family: Georgia, serif;}
@@ -115,37 +115,77 @@ tarot/RWS_Tarot_21_World.jpg
 # try adding another "print" line at the top
 # try putting "new-row" in
 
+deck target-adj
+Silver
+Shining
+Gold
+Glass
+Velvet
+Subtle
+Patchwork
+Lost
+Forbidden
+Mystic
+Emerald
+Sapphire
+Forgotten
+
+deck target
+Princess
+Mirror
+Goblet
+Key
+Book
+Slipper
+Lamp
+Sword
+Staff
+Princeling
+Ring
+Jewel
+Song
+
+die quest
+Quest
+Adventure
+Journey
+
+deck patron
+Merchant
+Guildmaster
+Noble
+Duke
+Duchess
+Count
+Countess
+Mayor
+
+die problem
+Dragon
+Bridge
+Ghost
+Maze
+Dungeon
+Spider
+Knight
+
 # go here to see more instructions:
 # http://github.com/polm/shesha
 # (still a mess though)
 generator
-image [tarot] Past
-image [tarot] Present
-image [tarot] Future
+save macguffin [target-adj] [target]
+print The [quest] for the [macguffin]
 new-row
-style height 300px
 image [bg]
-nest
-  print STR
-  roll 3
-  new-row
-  print DEX
-  roll 3
-  new-row
-  print WIS
-  roll 3
-  new-row
-  print HP
-  roll 1
-end-nest
-col-widths 70 30
 new-row
-print The [adj] [location] of the [adj] [person]
+print You have been hired by a local [patron] to find the [macguffin]. [!c /Legends/Stories/Tales/Ancient records] say to look in the [adj] [location], though you will have to [!c /contend with/get past/defeat/overcome/] the [adj] [problem].
     </textarea>
   </div>
   <div id="field">
-    <div id="carousel"></div>
+    <button id="copy">Copy Widget Code</button>
+    <div class="shesha-widget"></div>
+    <textarea id="dummy" style="height:1;opacity:0"></textarea>
   </div>
 
-  <script src="./index.js"></script>
+  <script src="./editor.js"></script>
 </html>

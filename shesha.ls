@@ -30,15 +30,9 @@ deck = (items) ->
   return res
 
 fade-in = (el) ->
-  opacity = 0
-  fade-in-h = ->
-    opacity += 1
-    el.style.opacity = opacity / 100
-    if opacity >= 100
-      return
-
-    set-timeout fade-in-h, 1
-  fade-in-h!
+  el.style.opacity = 0
+  ani = el.animate {opacity: [0, 1]}, {duration: 100, easing: \ease-in}
+  ani.onfinish = -> el.style.opacity = 1
 
 snake2camel = ->
   return it.0 + it.split('-')
@@ -46,8 +40,7 @@ snake2camel = ->
     .join ''
     .slice 1
 
-class Generator
-
+export class Generator
   ~>
     @sources = {}
     @special =
@@ -145,14 +138,11 @@ class Generator
 
       li++
 
-  make-widget: (sel='.shesha-widget') ~>
-    el = document.query-selector sel
+  make-widget: (el) ~>
     wr = new WidgetRenderer this, el
 
     wr.set-generator @genfunc
-
     wr.generate!
-
     el.onclick = wr.generate
 
 
@@ -170,7 +160,6 @@ class WidgetRenderer
 
   make-div: (parent=@row-el) ~>
     div = document.create-element \div
-    div.style.height = \100%
     div.style.flex = 1
     div.style.border = "1px solid black"
 
@@ -188,7 +177,6 @@ class WidgetRenderer
     @row-el = document.create-element \div
     @row-el.class-list.add \row
     @row-el.style.width = \100%
-    @row-el.style.height = \50px
     @row-el.style.display = \flex
     @row-el.style.flex = 1
     @el.append-child @row-el
@@ -197,7 +185,7 @@ class WidgetRenderer
     out = @gen.render template
     div = @make-div!
     div.innerHTML = out
-    
+
   image: (template) ~>
     rendered = @gen.render template
     words = rendered.split ' '
@@ -269,22 +257,11 @@ class WidgetRenderer
     @print (roll.apply this, arguments).to-string!
 
   generate: ~>
+    #@el.style.opacity = 0
     for source of @sources
       @sources[source].reset?! # reset decks as needed
 
     @el.innerHTML = '' # reset insides
-    @el.style.opacity = 0
     @new-row!
     @genfunc! # actually fill stuff
 
-textarea = document.query-selector 'textarea'
-
-textarea.onkeyup = ->
-  gen = new Generator!
-  try
-    gen.read-generator textarea.value
-    gen.make-widget \#carousel
-  catch e
-    console.log e
-
-textarea.onkeyup!
