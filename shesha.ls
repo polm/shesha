@@ -257,7 +257,7 @@ class WidgetRenderer
     @print (roll.apply this, arguments).to-string!
 
   generate: ~>
-    #@el.style.opacity = 0
+    @el.style.opacity = 0
     for source of @sources
       @sources[source].reset?! # reset decks as needed
 

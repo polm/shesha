@@ -23,8 +23,7 @@
     dummy.value = '<div class="shesha-widget" style="opacity:0;max-width:800px">' + textarea.value + '</div>';
     dummy.value += '<script src="https://rawgit.com/polm/shesha/master/embed.js"></script>';
     dummy.select();
-    document.execCommand('Copy');
-    return console.log(window.getSelection().toString());
+    return document.execCommand('Copy');
   };
 }).call(this);
 
@@ -384,6 +383,7 @@
     };
     WidgetRenderer.prototype.generate = function(){
       var source, ref$;
+      this.el.style.opacity = 0;
       for (source in this.sources) {
         if (typeof (ref$ = this.sources[source]).reset == 'function') {
           ref$.reset();

@@ -353,6 +353,7 @@
     };
     WidgetRenderer.prototype.generate = function(){
       var source, ref$;
+      this.el.style.opacity = 0;
       for (source in this.sources) {
         if (typeof (ref$ = this.sources[source]).reset == 'function') {
           ref$.reset();
