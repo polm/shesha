@@ -15,8 +15,9 @@ textarea.onkeyup!
 copy = document.query-selector \#copy
 
 copy.onclick = ->
+  # blank lines are replaced with a single underscore to keep markdown parsers happy
   dummy = document.query-selector \#dummy
-  dummy.value = '<div class="shesha-widget" style="opacity:0;max-width:800px">' + textarea.value + '</div>'
+  dummy.value = '<script type="text/plain" class="shesha-widget">\n' + textarea.value + '\n</script>\n'
   dummy.value += '<script src="https://rawgit.com/polm/shesha/master/embed.js"></script>'
   dummy.select!
   document.exec-command \Copy

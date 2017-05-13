@@ -20,7 +20,7 @@
   copy.onclick = function(){
     var dummy;
     dummy = document.querySelector('#dummy');
-    dummy.value = '<div class="shesha-widget" style="opacity:0;max-width:800px">' + textarea.value + '</div>';
+    dummy.value = '<script type="text/plain" class="shesha-widget">\n' + textarea.value + '\n</script>\n';
     dummy.value += '<script src="https://rawgit.com/polm/shesha/master/embed.js"></script>';
     dummy.select();
     return document.execCommand('Copy');
