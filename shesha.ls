@@ -31,6 +31,11 @@ deck = (items) ->
 
 fade-in = (el) ->
   el.style.opacity = 0
+  if not el.animate
+    # this is an issue for Edge and Safari
+    # http://caniuse.com/#feat=web-animation
+    el.style.opacity = 1
+    return
   ani = el.animate {opacity: [0, 1]}, {duration: 100, easing: \ease-in}
   ani.onfinish = -> el.style.opacity = 1
 

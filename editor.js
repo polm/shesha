@@ -80,6 +80,10 @@
   fadeIn = function(el){
     var ani;
     el.style.opacity = 0;
+    if (!el.animate) {
+      el.style.opacity = 1;
+      return;
+    }
     ani = el.animate({
       opacity: [0, 1]
     }, {
