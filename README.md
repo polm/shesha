@@ -33,6 +33,7 @@ The difference between a `die` and a `deck` is that a `die` **can** repeat value
 - **col-widths**: set widths of elements in the current row by ratio (uses flexbox).
 - **save**: saves the result of a template to a source with the given name. This is a bit complicated, so here's an example:
 
+
     deck people
     Alice
     Bob
