@@ -28,10 +28,10 @@ The difference between a `die` and a `deck` is that a `die` **can** repeat value
 - **new-row**: make a new row in the generator.
 - **print**: make a new cell in the row, and put text inside it. Terms inside `[brackets]` are taken to be the names of sources (dice or decks set before). Brackets can be nested.
 - **image**: like `print`, but it expects to get an image url. Any text after the url becomes a caption.
-- **style**: set the CSS attribute of the current row
-- **roll**: roll dice. Takes three values: number of dice to roll, sides per die, and bonus to apply.
+- **style**: set the CSS attribute of the current row. Ex: `style height 200px`
+- **roll**: roll dice. Takes three values: number of dice to roll, sides per die, and bonus to apply. Ex: 2d6 + 1 → `roll 2 6 1`
 - **col-widths**: set widths of elements in the current row by ratio (uses flexbox).
-- **save**: saves the result of a template to a source with the given name. This is a bit complicated, so here's an example:
+- **save**: saves the result of a template to a source with the given name. This is useful when you need to repeat the output of a template. This is a bit complicated, so here's an example:
 
 ```
     deck people
@@ -44,10 +44,20 @@ The difference between a `die` and a `deck` is that a `die` **can** repeat value
     print [first] said to [second] "Hello [second]"
 ```
 
-There are also embedded commands that can go in text passed to `print` and the like. 
+There are also embedded commands that can go in text passed to `print` and the like. They work by starting the label inside brackets with an exclamation point. Currently there are just two:
 
 - **roll**: Roll dice in-line. Ex: `print HP: [!r 1]` (rolls 1d6)
 - **choose**: Choose from an in-line list. The first non-whitespace character is used as the delimiter. Ex: `print You see a [!c /wizard/fighter/thief/]`
+
+## Related Work / Similar Projects
+
+- [Tracery](https://github.com/galaxykate/tracery)
+- [Perchance ⚄︎](https://perchance.org/welcome)
+- [RiTa Context Free Grammars](http://www.rednoise.org/pdal/index.php?n=Main.Grammars)
+- [The Seventh Order of the Random Generator](http://www.lastgaspgrimoire.com/generators/the-seventh-order-of-the-random-generator/)
+- [Abulafia Random Generators](http://www.random-generator.com/index.php?title=Main_Page)
+- [RandomGen](http://orteil.dashnet.org/randomgen/)
+- [Ink](https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md)
 
 ## License
 
