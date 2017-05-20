@@ -92,10 +92,8 @@ export class Generator
             out += error-output "ERROR: loop detected on key: #key"
             continue
 
-          stack.push key
-
           if @sources[key]
-            out += @render @sources[key]!, false, stack
+            out += @render @sources[key]!, false, stack.concat key
           else
             out += error-output "ERROR: no such source: #key"
         continue
