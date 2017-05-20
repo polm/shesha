@@ -1,6 +1,9 @@
 R = -> ~~(it * Math.random!)
 pick = -> it[R it.length]
 
+error-output = ->
+  return "<span style=\"color:red\">" + it + "</span>"
+
 roll = (num=1, sides=6, bonus=0) ->
     if num < 1 then num = 1
     res = bonus
@@ -69,21 +72,32 @@ export class Generator
 
     this[funcname].apply this, words
 
-  render: (template, inner=false) ~>
+  render: (template, inner=false, stack=[]) ~>
     out = ''
     ci = 0
     while ci < template.length and template[ci] != \]
       if template[ci] == '['
         [step, key] = @render template.substr(ci + 1), true
         ci += 2 + step
-        #TODO syntax for rolling etc.
         if key[0] == \!
           key = key.substr 1
           words = key.split ' '
           cmd = words.shift!
-          out += @special[cmd].apply this, words
+          if @special[cmd]
+            out += @special[cmd].apply this, words
+          else
+            out += error-output "ERROR: no such special command: #cmd"
         else
-          out += @render @sources[key]!
+          if -1 < stack.index-of key
+            out += error-output "ERROR: loop detected on key: #key"
+            continue
+
+          stack.push key
+
+          if @sources[key]
+            out += @render @sources[key]!, false, stack
+          else
+            out += error-output "ERROR: no such source: #key"
         continue
 
       out += template[ci]
