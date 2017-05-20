@@ -170,9 +170,8 @@
               out += errorOutput("ERROR: loop detected on key: " + key);
               continue;
             }
-            stack.push(key);
             if (this.sources[key]) {
-              out += this.render(this.sources[key](), false, stack);
+              out += this.render(this.sources[key](), false, stack.concat(key));
             } else {
               out += errorOutput("ERROR: no such source: " + key);
             }

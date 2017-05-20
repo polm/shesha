@@ -5,12 +5,12 @@
   Generator = require('./shesha').Generator;
   for (i$ = 0, len$ = (ref$ = document.querySelectorAll('.shesha-widget')).length; i$ < len$; ++i$) {
     el = ref$[i$];
+    el.classList.remove('.shesha-widget');
     gen = new Generator();
     widgetContainer = document.createElement('div');
     widgetContainer.style.opacity = 0;
     widgetContainer.style.maxWidth = '800px';
     el.parentNode.insertBefore(widgetContainer, el.nextSibling);
-    el.classList.remove('.shesha-widget');
     gen.readGenerator(el.textContent);
     gen.makeWidget(widgetContainer);
   }
@@ -159,9 +159,8 @@
               out += errorOutput("ERROR: loop detected on key: " + key);
               continue;
             }
-            stack.push(key);
             if (this.sources[key]) {
-              out += this.render(this.sources[key](), false, stack);
+              out += this.render(this.sources[key](), false, stack.concat(key));
             } else {
               out += errorOutput("ERROR: no such source: " + key);
             }
