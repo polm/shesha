@@ -5,7 +5,7 @@
   Generator = require('./shesha').Generator;
   for (i$ = 0, len$ = (ref$ = document.querySelectorAll('.shesha-widget')).length; i$ < len$; ++i$) {
     el = ref$[i$];
-    el.classList.remove('.shesha-widget');
+    el.classList.remove('shesha-widget');
     gen = new Generator();
     widgetContainer = document.createElement('div');
     widgetContainer.style.opacity = 0;
