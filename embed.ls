@@ -1,7 +1,7 @@
 Generator = require(\./shesha).Generator
 
 for el in document.query-selector-all \.shesha-widget
-  el.class-list.remove \.shesha-widget # prevent double processing
+  el.class-list.remove \shesha-widget # prevent double processing
   gen = new Generator!
   widget-container = document.create-element \div
   widget-container.style.opacity = 0
