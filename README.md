@@ -1,6 +1,8 @@
 # Shesha
 
-A tool for quickly building random generators. *HIGHLY EXPERIMENTAL*, even the name may change at this point.
+![Shesha, King of the Nagas](https://github.com/polm/shesha/raw/master/shesha.jpg)
+
+A tool for quickly building random generators. (Still pretty rough, but working.)
 
 To use, check out the git repo, start up an HTTP server, and give it a look.
 
@@ -23,7 +25,7 @@ A few things to note:
 
 The difference between a `die` and a `deck` is that a `die` **can** repeat values in one run of the generator, while a `deck` **can not**.
 
-`generator` is the command that builds the widget. There are a lot of commands you can use inside it. (This syntax is terrible so it **will** change.)
+`generator` is the command that builds the widget. There are a lot of commands you can use inside it. 
 
 - **new-row**: make a new row in the generator.
 - **print**: make a new cell in the row, and put text inside it. Terms inside `[brackets]` are taken to be the names of sources (dice or decks set before). Brackets can be nested.
