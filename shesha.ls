@@ -217,6 +217,7 @@ class WidgetRenderer
       cdiv.style.width = \100%
       cdiv.innerHTML = caption
 
+    @root.style.opacity = 0
     @load-count += 1
     img.onload = ~>
       @load-count -= 1
@@ -262,7 +263,6 @@ class WidgetRenderer
     @print (roll.apply this, arguments).to-string!
 
   generate: ~>
-    @el.style.opacity = 0
     for source of @sources
       @sources[source].reset?! # reset decks as needed
 
