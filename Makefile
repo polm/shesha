@@ -1,8 +1,5 @@
 all: embed.js editor.js random.js
 
-random.js: random.ls
-	lsc -c -o . random.ls
-
 shesha.js: shesha.ls
 	lsc -c -o . shesha.ls
 
