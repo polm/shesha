@@ -68,9 +68,9 @@ There are also embedded commands that can go in text passed to `print` and the l
 
 You can pass in the path of json files like so:
 
-    shesha -d file.json -c file2.json -c file3.json "print this"
+    shesha -d file.json -c file2.json -t file3.shesha "print this"
 
-JSON files are assumed to be flat objects with keys that contain lists. To treat every key as a die use `-d` for Dice, to treat as a deck use `-c` for Cards. If you have the same key in multiple files, the contents of the key will be **appended**. 
+JSON files are assumed to be flat objects with keys that contain lists. To treat every key as a die use `-d` for Dice, to treat as a deck use `-c` for Cards, to read a template file using the same syntax as the web editor use `-t` (the generator function will be ignored). If you have the same key in multiple files, the contents of the key will be **appended**. 
 
 Arguments without a prefix are assumed to be templates for rendering and will be printed after interpolation.
 
