@@ -1,0 +1,23 @@
+{
+  "name": "shesha",
+  "version": "0.0.2",
+  "description": "Random generator tools",
+  "main": "lib/shesha.js",
+  "scripts": {
+    "test": "false"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polm/shesha.git"
+  },
+  "keywords": [
+    "random",
+    "generator"
+  ],
+  "author": "23",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/polm/shesha/issues"
+  },
+  "homepage": "https://github.com/polm/shesha#readme"
+}
