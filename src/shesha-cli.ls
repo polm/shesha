@@ -10,8 +10,7 @@ mode = \template
 gen = new Shesha.Generator!
 
 read-source-data = ->
-  fname = args.shift!
-  JSON.parse fs.read-file-sync fname, \utf-8
+  JSON.parse fs.read-file-sync args.shift!, \utf-8
 
 while args.length > 0
   arg = args.shift!
@@ -22,5 +21,7 @@ while args.length > 0
   | \-d => # die
     for key, val of read-source-data!
       gen.add-die key, val
+  | \-t => # template language
+    gen.read-generator fs.read-file-sync args.shift!, \utf-8
   | otherwise =>
     console.log gen.render arg
