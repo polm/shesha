@@ -4,7 +4,20 @@
 
 A tool for quickly building random generators. (Still pretty rough, but working.)
 
-To use, check out the git repo, start up an HTTP server, and give it a look.
+## Command Line Quickstart
+
+For the command line interface, do this:
+
+    npm install -g shesha
+    shesha "Shesha is [!c /cool/nice/great/sssuper/]!"
+
+If you're intrigued, read on...
+
+## Web Version
+
+Even if you want to use Shesha mainly on the command line, it's easier to play around with the commands at first in the web version.
+
+To use the web version, go [here](https://polm.github.io/shesha/) or check out the git repo and start an HTTP server.
 
 The left pane is code, and after every keypress the right pane is updated. 
 
@@ -48,8 +61,18 @@ The difference between a `die` and a `deck` is that a `die` **can** repeat value
 
 There are also embedded commands that can go in text passed to `print` and the like. They work by starting the label inside brackets with an exclamation point. Currently there are just two:
 
-- **roll**: Roll dice in-line. Ex: `print HP: [!r 1]` (rolls 1d6)
+- **roll**: Roll dice in-line. Ex: `print HP: [!r 1]` (rolls 1d6) `print STR: [!r 3 6 2]` (rolls 3d6+2)
 - **choose**: Choose from an in-line list. The first non-whitespace character is used as the delimiter. Ex: `print You see a [!c /wizard/fighter/thief/]`
+
+## Command Line Features
+
+You can pass in the path of json files like so:
+
+    shesha -d file.json -c file2.json -c file3.json "print this"
+
+JSON files are assumed to be flat objects with keys that contain lists. To treat every key as a die use `-d` for Dice, to treat as a deck use `-c` for Cards. If you have the same key in multiple files, the contents of the key will be **appended**. 
+
+Arguments without a prefix are assumed to be templates for rendering and will be printed after interpolation.
 
 ## Related Work / Similar Projects
 
