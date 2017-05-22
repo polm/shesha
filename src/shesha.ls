@@ -51,15 +51,24 @@ snake2camel = ->
 export class Generator
   ~>
     @sources = {}
+    @sources-raw = {}
     @special =
       r: roll
       c: choose
 
   add-deck: (name, items) ~>
-    @sources[name] = deck items
+    base = items.slice 0
+    if @sources-raw[name]
+      base = base.concat @sources-raw[name]
+    @sources-raw[name] = base
+    @sources[name] = deck @sources-raw[name]
 
   add-die: (name, items) ~>
-    @sources[name] = -> pick items
+    base = items.slice 0
+    if @sources-raw[name]
+      base = base.concat @sources-raw[name]
+    @sources-raw[name] = base
+    @sources[name] = ~> pick @sources-raw[name]
 
   exec: (line) ->
     words = line.split ' '
