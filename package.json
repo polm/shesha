@@ -1,6 +1,6 @@
 {
   "name": "shesha",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Random generator tools",
   "main": "lib/shesha.js",
   "scripts": {
