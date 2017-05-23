@@ -21,7 +21,7 @@
     var dummy;
     dummy = document.querySelector('#dummy');
     dummy.value = '<script type="text/plain" class="shesha-widget">\n' + textarea.value + '\n</script>\n';
-    dummy.value += '<script src="https://rawgit.com/polm/shesha/master/embed.js"></script>';
+    dummy.value += '<script async src="https://rawgit.com/polm/shesha/master/embed.js"></script>';
     dummy.select();
     return document.execCommand('Copy');
   };
