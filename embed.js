@@ -8,7 +8,6 @@
     el.classList.remove('shesha-widget');
     gen = new Generator();
     widgetContainer = document.createElement('div');
-    widgetContainer.style.opacity = 0;
     widgetContainer.style.maxWidth = '800px';
     el.parentNode.insertBefore(widgetContainer, el.nextSibling);
     gen.readGenerator(el.textContent);
