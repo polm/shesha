@@ -20,6 +20,8 @@ choose = ->
   choices = template.split(delim).filter -> it
   return pick choices
 
+uppercase = -> it.0.to-upper-case! + it.slice 1
+
 deck = (items) ->
   items = items.slice 0 # don't modify the argument
   orig = items.slice 0 # save a copy
@@ -55,6 +57,7 @@ export class Generator
     @special =
       r: roll
       c: choose
+      u: uppercase
 
   add-deck: (name, items) ~>
     base = items.slice 0
@@ -90,7 +93,7 @@ export class Generator
         ci += 2 + step
         if key[0] == \!
           key = key.substr 1
-          words = key.split ' '
+          words = @render(key).split ' '
           cmd = words.shift!
           if @special[cmd]
             out += @special[cmd].apply this, words
