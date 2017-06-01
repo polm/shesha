@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/polm/shesha/issues"
   },
-  "homepage": "https://github.com/polm/shesha#readme"
+  "homepage": "https://github.com/polm/shesha#readme",
+  "dependencies": {
+    "articles": "^0.2.1"
+  }
 }

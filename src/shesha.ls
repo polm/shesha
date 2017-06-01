@@ -1,3 +1,5 @@
+indefinite = require(\articles).articlize
+
 R = -> ~~(it * Math.random!)
 pick = -> it[R it.length]
 
@@ -58,6 +60,8 @@ export class Generator
       r: roll
       c: choose
       u: uppercase
+      a: indefinite
+      A: -> uppercase indefinite it
 
   add-deck: (name, items) ~>
     base = items.slice 0
