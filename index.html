@@ -1,12 +1,17 @@
 <html>
   <title>Shesha Random Generator Demo</title>
 
+<link rel="stylesheet" href="css/codemirror.css">
+<link rel="stylesheet" href="css/paraiso-dark.css">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box;}
 .shesha-widget {
   width: 500px;
 }
-body{ font-family: Georgia, serif; display: flex;}
+
+body { 
+  font-family: Georgia, serif; 
+}
 
 button {
   display: block;
@@ -15,7 +20,7 @@ button {
   font-size: 16px;
 }
 
-textarea { 
+textarea, .CodeMirror { 
   font-family: monospace;
   width: 100%;
   height: 100%;
@@ -23,8 +28,10 @@ textarea {
 }
 
 #editor, #field {
+  /*
   flex: 1;
   flex-grow: 1;
+    */
   max-height: 100%;
 }
 
