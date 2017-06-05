@@ -76,6 +76,11 @@ export class Generator
       base = base.concat @sources-raw[name]
     @sources-raw[name] = base
     @sources[name] = ~> pick @sources-raw[name]
+    return @sources[name]
+
+  clear: (name) ~>
+    delete @sources[name]
+    delete @sources-raw[name]
 
   exec: (line) ->
     words = line.split ' '
@@ -189,6 +194,7 @@ class WidgetRenderer
     # this is used to save values during a run
     # it's faked using a die with one side
     template = words.join ' '
+    @gen.clear key
     @gen.add-die key, [@gen.render template]
 
   make-div: (parent=@row-el) ~>

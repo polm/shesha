@@ -104,6 +104,7 @@
       this$.readTerms = bind$(this$, 'readTerms', prototype);
       this$.setGenerator = bind$(this$, 'setGenerator', prototype);
       this$.render = bind$(this$, 'render', prototype);
+      this$.clear = bind$(this$, 'clear', prototype);
       this$.addDie = bind$(this$, 'addDie', prototype);
       this$.addDeck = bind$(this$, 'addDeck', prototype);
       this$.sources = {};
@@ -135,9 +136,15 @@
         base = base.concat(this.sourcesRaw[name]);
       }
       this.sourcesRaw[name] = base;
-      return this.sources[name] = function(){
+      this.sources[name] = function(){
         return pick(this$.sourcesRaw[name]);
       };
+      return this.sources[name];
+    };
+    Generator.prototype.clear = function(name){
+      var ref$, ref1$;
+      delete this.sources[name];
+      return ref1$ = (ref$ = this.sourcesRaw)[name], delete ref$[name], ref1$;
     };
     Generator.prototype.exec = function(line){
       var words, funcname;
@@ -297,6 +304,7 @@
       }
       words = res$;
       template = words.join(' ');
+      this.gen.clear(key);
       return this.gen.addDie(key, [this.gen.render(template)]);
     };
     WidgetRenderer.prototype.makeDiv = function(parent){
