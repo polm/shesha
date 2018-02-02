@@ -7,6 +7,11 @@ error-output = ->
   return "<span style=\"color:red\">" + it + "</span>"
 
 roll = (num=1, sides=6, bonus=0) ->
+    # cast everything
+    num = +num
+    sides = +sides
+    bonus = +bonus
+
     if num < 1 then num = 1
     res = bonus
     for ii from 0 til num
