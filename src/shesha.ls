@@ -98,6 +98,10 @@ export class Generator
 
     this[funcname].apply this, words
 
+  reset: ~>
+    for source of @sources
+      @sources[source].reset?! # reset decks as needed
+
   render: (template, inner=false, stack=[]) ~>
     out = ''
     ci = 0
@@ -187,7 +191,6 @@ export class Generator
     wr.set-generator @genfunc
     wr.generate!
     el.onclick = wr.generate
-
 
 class WidgetRenderer
   (@gen, @el) ~>
