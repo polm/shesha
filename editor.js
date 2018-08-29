@@ -203,6 +203,7 @@
       this$.readTerms = bind$(this$, 'readTerms', prototype);
       this$.setGenerator = bind$(this$, 'setGenerator', prototype);
       this$.render = bind$(this$, 'render', prototype);
+      this$.reset = bind$(this$, 'reset', prototype);
       this$.clear = bind$(this$, 'clear', prototype);
       this$.addDie = bind$(this$, 'addDie', prototype);
       this$.addDeck = bind$(this$, 'addDeck', prototype);
@@ -261,6 +262,13 @@
         });
       }
       return this[funcname].apply(this, words);
+    };
+    Generator.prototype.reset = function(){
+      var source, ref$, results$ = [];
+      for (source in this.sources) {
+        results$.push(typeof (ref$ = this.sources[source]).reset == 'function' ? ref$.reset() : void 8);
+      }
+      return results$;
     };
     Generator.prototype.render = function(template, inner, stack){
       var out, ci, ref$, step, key, words, cmd;
