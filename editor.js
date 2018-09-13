@@ -123,11 +123,6 @@
       res$.push(arguments[i$]);
     }
     rest = res$;
-    console.log('---');
-    console.log(word);
-    console.log(rest);
-    console.log(articlize(word));
-    console.log([articlize(word)].concat(rest));
     return [articlize(word)].concat(rest).join(' ');
   };
   R = function(it){
