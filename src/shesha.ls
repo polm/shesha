@@ -1,4 +1,7 @@
-indefinite = require(\articles).articlize
+articlize = require(\articles).articlize
+
+indefinite = (word, ...rest) ->
+  return ([articlize word].concat rest).join ' '
 
 R = -> ~~(it * Math.random!)
 pick = -> it[R it.length]
@@ -190,7 +193,13 @@ export class Generator
 
     wr.set-generator @genfunc
     wr.generate!
-    el.onclick = wr.generate
+    reroll = document.create-element \button
+    reroll.style['max-width'] = \800px
+    reroll.style.width = \100%
+    reroll.style.padding = \0.5em
+    reroll.innerHTML = "Click to regenerate"
+    reroll.onclick = wr.generate
+    el.parent-node.insert-before reroll, el
 
 class WidgetRenderer
   (@gen, @el) ~>
