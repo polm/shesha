@@ -284,17 +284,10 @@
       }
     };
     Generator.prototype.makeWidget = function(el){
-      var wr, reroll;
+      var wr;
       wr = new WidgetRenderer(this, el);
       wr.setGenerator(this.genfunc);
-      wr.generate();
-      reroll = document.createElement('button');
-      reroll.style['max-width'] = '800px';
-      reroll.style.width = '100%';
-      reroll.style.padding = '0.5em';
-      reroll.innerHTML = "Click to regenerate";
-      reroll.onclick = wr.generate;
-      return el.parentNode.insertBefore(reroll, el);
+      return wr.generate();
     };
     return Generator;
   }());
@@ -316,10 +309,12 @@
       this$.print = bind$(this$, 'print', prototype);
       this$.newRow = bind$(this$, 'newRow', prototype);
       this$.makeDiv = bind$(this$, 'makeDiv', prototype);
+      this$.makeButton = bind$(this$, 'makeButton', prototype);
       this$.save = bind$(this$, 'save', prototype);
       this$.loadCount = 0;
       this$.root = this$.el;
       this$.sources = this$.gen.sources;
+      this$.makeButton();
       return this$;
     } function ctor$(){} ctor$.prototype = prototype;
     WidgetRenderer.prototype.save = function(key){
@@ -332,6 +327,17 @@
       template = words.join(' ');
       this.gen.clear(key);
       return this.gen.addDie(key, [this.gen.render(template)]);
+    };
+    WidgetRenderer.prototype.makeButton = function(){
+      var reroll;
+      reroll = document.createElement('button');
+      reroll.style['max-width'] = '800px';
+      reroll.style.width = '100%';
+      reroll.style.padding = '0.5em';
+      reroll.innerHTML = "Click to regenerate";
+      reroll.onclick = this.generate;
+      this.el.appendChild(reroll);
+      return this.button = reroll;
     };
     WidgetRenderer.prototype.makeDiv = function(parent){
       var div;
@@ -454,6 +460,7 @@
         }
       }
       this.el.innerHTML = '';
+      this.el.appendChild(this.button);
       this.newRow();
       return this.genfunc();
     };
