@@ -193,19 +193,13 @@ export class Generator
 
     wr.set-generator @genfunc
     wr.generate!
-    reroll = document.create-element \button
-    reroll.style['max-width'] = \800px
-    reroll.style.width = \100%
-    reroll.style.padding = \0.5em
-    reroll.innerHTML = "Click to regenerate"
-    reroll.onclick = wr.generate
-    el.parent-node.insert-before reroll, el
 
 class WidgetRenderer
   (@gen, @el) ~>
     @load-count = 0
     @root = @el
     @sources = @gen.sources
+    @make-button!
 
   save: (key, ...words) ~>
     # this is used to save values during a run
@@ -213,6 +207,17 @@ class WidgetRenderer
     template = words.join ' '
     @gen.clear key
     @gen.add-die key, [@gen.render template]
+
+  make-button: ~>
+    reroll = document.create-element \button
+    reroll.style['max-width'] = \800px
+    reroll.style.width = \100%
+    reroll.style.padding = \0.5em
+    reroll.innerHTML = "Click to regenerate"
+    reroll.onclick = @generate
+    #@el.parent-node.append reroll, @el
+    @el.append-child reroll
+    @button = reroll
 
   make-div: (parent=@row-el) ~>
     div = document.create-element \div
@@ -318,6 +323,7 @@ class WidgetRenderer
       @sources[source].reset?! # reset decks as needed
 
     @el.innerHTML = '' # reset insides
+    @el.append-child @button
     @new-row!
     @genfunc! # actually fill stuff
 
